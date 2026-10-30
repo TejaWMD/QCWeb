@@ -4,11 +4,25 @@
     <meta charset="utf-8">
     <title>QC Web</title>
     <script>
-      // Single Page App redirect for GitHub Pages
-      sessionStorage.redirect = location.href;
-      location.replace(location.pathname.startsWith('/QCWeb') ? '/QCWeb/' : '/');
+      (function() {
+        var path = window.location.pathname;
+        var prefix = '/QCWeb';
+        var relative = path.startsWith(prefix) ? path.slice(prefix.length) : path;
+        if (relative.startsWith('/')) {
+          relative = relative.slice(1);
+        }
+        var search = window.location.search || '';
+        var hash = window.location.hash || '';
+
+        if (relative) {
+          window.location.replace(prefix + '/#/' + relative + search + hash);
+        } else {
+          window.location.replace(prefix + '/' + search + hash);
+        }
+      })();
     </script>
   </head>
   <body>
+    <p>Redirecting to QC Web...</p>
   </body>
 </html>
