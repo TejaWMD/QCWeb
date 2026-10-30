@@ -38,8 +38,17 @@ export const loadPackagingItems = async () => {
 
 // Warehouse materials that recipes draw from (empty when the warehouse list is unused).
 export const loadMaterials = async () => {
-  const { data } = await supabase.from('warehouse_items').select('*').order('item_code').catch(() => ({ data: [] }));
-  return Array.isArray(data) ? data : [];
+  try {
+    const { data, error } = await supabase.from('warehouse_items').select('*').order('item_code');
+    if (error) {
+      console.warn('Could not load warehouse items:', error.message);
+      return [];
+    }
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    console.warn('Could not load warehouse items:', err);
+    return [];
+  }
 };
 
 const upper = (s) => (s || "").trim().toUpperCase();

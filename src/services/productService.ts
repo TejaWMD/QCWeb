@@ -34,31 +34,41 @@ export const calculateProductDerivedFields = (p: Partial<ProductInput>) => {
 export const productService = {
   // Fetch active products
   async getActiveProducts(): Promise<Product[]> {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .eq('deleted', false)
-      .order('product_code', { ascending: true });
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('deleted', false)
+        .order('product_code', { ascending: true });
 
-    if (error) {
-      console.error('Error fetching active products:', error);
-      throw error;
+      if (error) {
+        console.warn('Error fetching active products:', error.message);
+        return [];
+      }
+      return (data || []) as Product[];
+    } catch (err: any) {
+      console.warn('Network error loading active products:', err?.message || err);
+      return [];
     }
-    return (data || []) as Product[];
   },
 
   // Fetch all products (including deleted)
   async getAllProducts(): Promise<Product[]> {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('product_code', { ascending: true });
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('product_code', { ascending: true });
 
-    if (error) {
-      console.error('Error fetching all products:', error);
-      throw error;
+      if (error) {
+        console.warn('Error fetching all products:', error.message);
+        return [];
+      }
+      return (data || []) as Product[];
+    } catch (err: any) {
+      console.warn('Network error loading products:', err?.message || err);
+      return [];
     }
-    return (data || []) as Product[];
   },
 
   // Fetch a single product by ID
