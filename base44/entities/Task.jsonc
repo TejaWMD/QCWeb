@@ -1,0 +1,64 @@
+{
+  "name": "Task",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "What needs to be done"
+    },
+    "module": {
+      "type": "string",
+      "description": "Module the task belongs to (Task Matrix, Production, QA & HACCP, Downtime, Staffing)"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "Low",
+        "Medium",
+        "High"
+      ],
+      "default": "Medium"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Supervisor accountable for completing the task"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "In Progress",
+        "Overdue",
+        "Completed",
+        "Verified"
+      ],
+      "default": "Open"
+    },
+    "evidence_file_uri": {
+      "type": "string",
+      "description": "Evidence attachment required to close the task (stored privately)"
+    },
+    "evidence_file_name": {
+      "type": "string",
+      "description": "Evidence attachment file name"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "shift_date"
+  ]
+}

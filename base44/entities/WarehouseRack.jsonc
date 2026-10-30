@@ -1,0 +1,26 @@
+{
+  "name": "WarehouseRack",
+  "type": "object",
+  "properties": {
+    "rack_code": {
+      "type": "string",
+      "description": "Rack location code, e.g. A-01-1"
+    },
+    "zone": {
+      "type": "string",
+      "description": "Warehouse zone the rack belongs to"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Inactive"
+      ],
+      "default": "Active",
+      "description": "Inactive racks are hidden from the receiving form"
+    }
+  },
+  "required": [
+    "rack_code"
+  ]
+}

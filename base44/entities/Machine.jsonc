@@ -1,0 +1,32 @@
+{
+  "name": "Machine",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Machine name; matches the production line name used by the downtime page"
+    },
+    "location": {
+      "type": "string",
+      "description": "Where the machine sits"
+    },
+    "capacity_cph": {
+      "type": "number",
+      "description": "Capacity in cartons per hour"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Under Maintenance"
+      ],
+      "default": "Active"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

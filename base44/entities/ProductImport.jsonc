@@ -1,0 +1,108 @@
+{
+  "name": "ProductImport",
+  "type": "object",
+  "properties": {
+    "file_name": {
+      "type": "string"
+    },
+    "imported_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "imported_by": {
+      "type": "string"
+    },
+    "created_count": {
+      "type": "number",
+      "default": 0
+    },
+    "updated_count": {
+      "type": "number",
+      "default": 0
+    },
+    "skipped_count": {
+      "type": "number",
+      "default": 0
+    },
+    "warnings_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Rows imported that carried a warning"
+    },
+    "errors_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Rows rejected by the import"
+    },
+    "recipes_created": {
+      "type": "array",
+      "description": "Recipe Master records created by this import",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "machines_created": {
+      "type": "array",
+      "description": "Kept for older imports",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "changes": {
+      "type": "array",
+      "description": "What the import changed, kept so the import can be undone",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "old_value": {
+                  "type": "string"
+                },
+                "new_value": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "default": []
+    },
+    "undone": {
+      "type": "boolean",
+      "default": false
+    },
+    "undone_by": {
+      "type": "string"
+    },
+    "undone_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "file_name",
+    "imported_at"
+  ]
+}

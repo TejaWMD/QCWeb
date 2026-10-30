@@ -1,0 +1,25 @@
+{
+  "name": "WarehouseItem",
+  "type": "object",
+  "properties": {
+    "item_code": {
+      "type": "string",
+      "description": "Unique item code used on the receiving form"
+    },
+    "description": {
+      "type": "string",
+      "description": "Product description"
+    },
+    "unit": {
+      "type": "string",
+      "description": "Default unit of measure"
+    },
+    "category": {
+      "type": "string",
+      "description": "Raw Material, Packaging, Finished Goods, Spare Part, Consumable, Other"
+    }
+  },
+  "required": [
+    "item_code"
+  ]
+}

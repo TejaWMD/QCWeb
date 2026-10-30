@@ -1,0 +1,148 @@
+{
+  "name": "OperationLog",
+  "type": "object",
+  "properties": {
+    "ot_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "product_sku": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "product_type": {
+      "type": "string"
+    },
+    "batch_number": {
+      "type": "string"
+    },
+    "task": {
+      "type": "string"
+    },
+    "staff_count": {
+      "type": "number",
+      "default": 1
+    },
+    "staff_name": {
+      "type": "string"
+    },
+    "ot_objective": {
+      "type": "string"
+    },
+    "ot_start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ot_end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "hourly_ot_rate": {
+      "type": "number",
+      "default": 12
+    },
+    "planned_cartons": {
+      "type": "number",
+      "default": 0
+    },
+    "pcs_per_carton": {
+      "type": "number",
+      "default": 0
+    },
+    "planned_ot_qty": {
+      "type": "number",
+      "default": 0
+    },
+    "actual_good_output": {
+      "type": "number",
+      "default": 0
+    },
+    "rejected_wasted_qty": {
+      "type": "number",
+      "default": 0
+    },
+    "downtime_min": {
+      "type": "number",
+      "default": 0
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Shift log session this record is synced from"
+    },
+    "record_batch": {
+      "type": "string",
+      "enum": [
+        "legacy",
+        "current"
+      ],
+      "default": "current"
+    },
+    "access_scopes": {
+      "type": "array",
+      "description": "Modules that may read this record",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "operation_record"
+      ]
+    }
+  },
+  "required": [
+    "ot_date",
+    "production_line",
+    "product_sku"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.access_scopes": {
+            "$in": "{{user.data.permissions}}"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "user"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

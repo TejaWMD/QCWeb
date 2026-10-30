@@ -1,0 +1,28 @@
+{
+  "name": "PackagingSettings",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Settings document key (packaging_stock)"
+    },
+    "categories": {
+      "type": "array",
+      "description": "Packaging item categories offered on the item form",
+      "items": {
+        "type": "string"
+      }
+    },
+    "use_approval_threshold": {
+      "type": "number",
+      "default": 500,
+      "description": "A stock issue above this quantity needs supervisor approval"
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "key"
+  ]
+}

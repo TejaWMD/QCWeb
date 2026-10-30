@@ -1,0 +1,249 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "product_code": {
+      "type": "string",
+      "description": "Item Code from the datasheet; the unique key every module references"
+    },
+    "product_name": {
+      "type": "string",
+      "description": "Item Description / Carton Description, trimmed"
+    },
+    "product_name_original": {
+      "type": "string",
+      "description": "Description exactly as it appeared in the imported file"
+    },
+    "brand": {
+      "type": "string",
+      "description": "Brand from the brand list in Product Master settings"
+    },
+    "recipe_name": {
+      "type": "string",
+      "description": "Recipe name from the datasheet; products sharing a recipe share one Recipe Master record"
+    },
+    "recipe_id": {
+      "type": "string",
+      "description": "Recipe Master record built from recipe_name"
+    },
+    "cooking_time_hr": {
+      "type": "number",
+      "description": "Cooking / process time in hours"
+    },
+    "cooking_time_min": {
+      "type": "number",
+      "description": "Cooking time in minutes (hours x 60), kept for older screens"
+    },
+    "batch_output_kg": {
+      "type": "number",
+      "description": "Output of one batch in kg"
+    },
+    "carton_size": {
+      "type": "number",
+      "description": "Pcs per carton"
+    },
+    "net_weight_kg": {
+      "type": "number",
+      "description": "Net weight per piece in kg"
+    },
+    "target_net_weight_g": {
+      "type": "number",
+      "description": "Net weight per piece in grams (kg x 1000), used by yield and fill checks"
+    },
+    "net_filling_kg": {
+      "type": "number",
+      "description": "Calculated: pcs per carton x net weight per piece"
+    },
+    "cartons_per_batch": {
+      "type": "number",
+      "description": "Calculated: batch output / net filling, 1 decimal"
+    },
+    "standard_batch_cartons": {
+      "type": "number",
+      "description": "Cartons per batch rounded, used by order generation"
+    },
+    "line_type": {
+      "type": "string",
+      "description": "Line type from the datasheet (SAUCE, POUCH, SYRUP, ...) - not a machine code"
+    },
+    "line_code": {
+      "type": "string",
+      "description": "Legacy machine link; new products leave this blank and use Default Machine"
+    },
+    "default_machine": {
+      "type": "string",
+      "description": "Default machine (links to the Machines list); left blank on import"
+    },
+    "batch_prefix": {
+      "type": "string",
+      "description": "Batch Code, the 3-letter prefix used in batch numbers"
+    },
+    "shelf_life_months": {
+      "type": "number",
+      "description": "Shelf life in months"
+    },
+    "shelf_life_days": {
+      "type": "number",
+      "description": "Shelf life in days (months x 30); used for expiry dates"
+    },
+    "barcode": {
+      "type": "string",
+      "description": "SKU (piece) barcode stored as text"
+    },
+    "carton_barcode": {
+      "type": "string",
+      "description": "Carton barcode stored as text; may be empty"
+    },
+    "customer": {
+      "type": "string",
+      "description": "Customer, upper case; empty means GENERAL"
+    },
+    "channels": {
+      "type": "array",
+      "description": "Customer list kept for older screens",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Pending",
+        "Inactive"
+      ],
+      "default": "Active",
+      "description": "Active products are offered in dropdowns and scans; Inactive ones stay on old records"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Mirrors status so older screens keep working"
+    },
+    "hidden": {
+      "type": "boolean",
+      "default": false,
+      "description": "Hidden products are left out of dropdowns for new records"
+    },
+    "size_value": {
+      "type": "number",
+      "description": "Legacy pack size value"
+    },
+    "size_unit": {
+      "type": "string",
+      "enum": [
+        "G",
+        "KG",
+        "ML",
+        "L"
+      ],
+      "description": "Legacy pack size unit"
+    },
+    "category": {
+      "type": "string"
+    },
+    "packing_time_min": {
+      "type": "number",
+      "description": "Packing time per batch in minutes"
+    },
+    "lower_tolerance_g": {
+      "type": "number",
+      "description": "Underweight limit in grams for fill checks"
+    },
+    "cost_per_kg": {
+      "type": "number",
+      "description": "Cost per kg, used to value giveaway"
+    },
+    "remarks": {
+      "type": "string",
+      "description": "Free-text remarks for the master datasheet"
+    },
+    "carton_skus": {
+      "type": "array",
+      "description": "Carton option mirrored from Pcs per Carton and Carton Barcode",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "item_code": {
+            "type": "string"
+          },
+          "barcode": {
+            "type": "string"
+          },
+          "units_per_carton": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    },
+    "custom_fields": {
+      "type": "array",
+      "description": "Extra columns imported from the file that the Admin chose to keep",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "packaging_per_carton": {
+      "type": "array",
+      "description": "Packaging items used per carton, linked to Packaging Stock",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string"
+          },
+          "item_code": {
+            "type": "string"
+          },
+          "item_name": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    },
+    "default_label_layout": {
+      "type": "string",
+      "description": "Label layout saved as this product's default"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Deleted products move to Recently Deleted, never removed"
+    },
+    "deleted_by": {
+      "type": "string"
+    },
+    "deleted_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "product_code",
+    "product_name"
+  ]
+}

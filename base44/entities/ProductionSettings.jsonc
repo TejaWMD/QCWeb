@@ -1,0 +1,26 @@
+{
+  "name": "ProductionSettings",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Settings document key (production)"
+    },
+    "batch_pattern": {
+      "type": "string",
+      "default": "{CODE}{DDMMYYYY}{LETTER}",
+      "description": "Batch number pattern; tokens CODE, DDMMYYYY, YYMMDD, LETTER and SEQ"
+    },
+    "default_cph": {
+      "type": "number",
+      "default": 300,
+      "description": "Cartons per hour used when a machine has no capacity set"
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "key"
+  ]
+}

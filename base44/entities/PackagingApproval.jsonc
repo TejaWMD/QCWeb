@@ -1,0 +1,94 @@
+{
+  "name": "PackagingApproval",
+  "type": "object",
+  "properties": {
+    "approval_type": {
+      "type": "string",
+      "enum": [
+        "Stock Adjustment",
+        "Stock Use"
+      ],
+      "default": "Stock Adjustment",
+      "description": "A stock count correction, or an issue above the approval threshold"
+    },
+    "item_id": {
+      "type": "string"
+    },
+    "item_code": {
+      "type": "string"
+    },
+    "item_name": {
+      "type": "string"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "system_qty": {
+      "type": "number",
+      "description": "Stock on hand when the request was raised"
+    },
+    "requested_qty": {
+      "type": "number",
+      "description": "Counted quantity for an adjustment, or the quantity to issue"
+    },
+    "difference": {
+      "type": "number",
+      "description": "Counted minus system quantity"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "batch_number": {
+      "type": "string"
+    },
+    "rack_location": {
+      "type": "string"
+    },
+    "production_order": {
+      "type": "string"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "remarks": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Approved",
+        "Rejected"
+      ],
+      "default": "Pending"
+    },
+    "requested_by": {
+      "type": "string"
+    },
+    "requested_by_id": {
+      "type": "string"
+    },
+    "requested_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "decided_by": {
+      "type": "string"
+    },
+    "decided_by_id": {
+      "type": "string"
+    },
+    "decided_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "decision_comment": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "approval_type",
+    "item_id",
+    "status"
+  ]
+}

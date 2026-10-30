@@ -1,0 +1,123 @@
+{
+  "name": "Downtime",
+  "type": "object",
+  "properties": {
+    "production_line": {
+      "type": "string",
+      "description": "Line the stoppage occurred on"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Night"
+      ],
+      "default": "Morning",
+      "description": "Shift A (Day) = Morning, Shift B (Night) = Night"
+    },
+    "start_time": {
+      "type": "string",
+      "description": "Stoppage start (HH:MM)"
+    },
+    "end_time": {
+      "type": "string",
+      "description": "Stoppage end (HH:MM); optional while the stoppage is ongoing"
+    },
+    "duration_min": {
+      "type": "number",
+      "description": "Total stoppage minutes"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Mechanical",
+        "Electrical",
+        "Material Shortage",
+        "Changeover",
+        "Quality Hold",
+        "Staffing",
+        "Other"
+      ],
+      "default": "Mechanical"
+    },
+    "reason": {
+      "type": "string",
+      "description": "What caused the stoppage"
+    },
+    "immediate_action_taken": {
+      "type": "string",
+      "description": "Immediate action taken when the stoppage occurred"
+    },
+    "product_affected": {
+      "type": "string",
+      "enum": [
+        "No",
+        "Yes"
+      ],
+      "default": "No",
+      "description": "Whether product was affected by the stoppage"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Person accountable for resolution (legacy single-owner field)"
+    },
+    "owners": {
+      "type": "array",
+      "description": "Teams the request is routed to (Maintenance, QA/QC Team, MD, Warehouse)",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "Resolved"
+      ],
+      "default": "Open"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "default": false,
+      "description": "Demo / test record: excluded from dashboards, KPIs and scorecards"
+    },
+    "evidence_files": {
+      "type": "array",
+      "description": "Evidence attachments (stored privately) with caption, uploader and time",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file_uri": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "uploaded_by": {
+            "type": "string"
+          },
+          "uploaded_date": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "production_line",
+    "shift_date",
+    "reason"
+  ]
+}

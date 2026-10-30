@@ -1,0 +1,88 @@
+{
+  "name": "FormConfig",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Config document key (request_form for the New Request form)"
+    },
+    "categories": {
+      "type": "array",
+      "description": "Downtime category dropdown values",
+      "items": {
+        "type": "string"
+      }
+    },
+    "approval_types": {
+      "type": "array",
+      "description": "Approval type dropdown values",
+      "items": {
+        "type": "string"
+      }
+    },
+    "item_categories": {
+      "type": "array",
+      "description": "Item / Material request category dropdown values",
+      "items": {
+        "type": "string"
+      }
+    },
+    "urgencies": {
+      "type": "array",
+      "description": "Urgency dropdown values",
+      "items": {
+        "type": "string"
+      }
+    },
+    "proposed_actions": {
+      "type": "array",
+      "description": "Proposed action dropdown values",
+      "items": {
+        "type": "string"
+      }
+    },
+    "owner_teams": {
+      "type": "array",
+      "description": "Owner team dropdown values",
+      "items": {
+        "type": "string"
+      }
+    },
+    "printed_items": {
+      "type": "array",
+      "description": "What-was-printed dropdown values (Labelling / Packaging Error)",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_required_downtime": {
+      "type": "boolean",
+      "description": "Whether an evidence photo is required for Downtime / Stoppage requests",
+      "default": true
+    },
+    "evidence_required_approval_types": {
+      "type": "array",
+      "description": "Approval types that require an evidence photo",
+      "items": {
+        "type": "string"
+      }
+    },
+    "purchase_md_limit": {
+      "type": "number",
+      "description": "Purchase / Spending amount above which the request is routed to the MD",
+      "default": 500
+    },
+    "required": {
+      "type": "object",
+      "description": "Required field keys per request type",
+      "additionalProperties": true
+    },
+    "updated_by": {
+      "type": "string",
+      "description": "Who last changed these settings"
+    }
+  },
+  "required": [
+    "key"
+  ]
+}

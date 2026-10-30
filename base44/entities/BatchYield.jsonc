@@ -1,0 +1,133 @@
+{
+  "name": "BatchYield",
+  "type": "object",
+  "properties": {
+    "batch_record_id": {
+      "type": "string",
+      "description": "Batch Records record this yield belongs to"
+    },
+    "batch_number": {
+      "type": "string"
+    },
+    "order_number": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "product_code": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "production_line": {
+      "type": "string",
+      "description": "Machine / line the batch ran on"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Night"
+      ],
+      "default": "Morning"
+    },
+    "cartons": {
+      "type": "number",
+      "description": "Quantity produced in cartons"
+    },
+    "carton_size": {
+      "type": "number",
+      "description": "Units per carton from Product Master"
+    },
+    "net_weight_g": {
+      "type": "number",
+      "description": "Target net weight per unit from Product Master"
+    },
+    "output_kg": {
+      "type": "number",
+      "description": "cartons x carton size x net weight / 1000"
+    },
+    "input_auto_kg": {
+      "type": "number",
+      "description": "Ingredient kg calculated from the goods issued to this batch"
+    },
+    "input_kg": {
+      "type": "number",
+      "description": "Ingredient kg used, auto value or a manual override"
+    },
+    "input_source": {
+      "type": "string",
+      "enum": [
+        "Goods Issued",
+        "Manual"
+      ],
+      "default": "Goods Issued"
+    },
+    "issued_lines": {
+      "type": "number",
+      "description": "How many goods-issued lines fed the auto value"
+    },
+    "override_reason": {
+      "type": "string",
+      "description": "Required when the auto input kg is overridden"
+    },
+    "yield_pct": {
+      "type": "number",
+      "description": "output kg / input kg x 100"
+    },
+    "standard_yield_pct": {
+      "type": "number",
+      "description": "Standard yield from the product's active recipe"
+    },
+    "tolerance_pct": {
+      "type": "number",
+      "description": "Tolerance in force when the record was saved"
+    },
+    "variance_pct": {
+      "type": "number",
+      "description": "Actual yield minus standard yield"
+    },
+    "within_tolerance": {
+      "type": "boolean",
+      "default": true,
+      "description": "False when the shortfall is bigger than the tolerance, which flags the batch red"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Verified"
+      ],
+      "default": "Draft"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Production staff member who entered the yield"
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "verified_by": {
+      "type": "string"
+    },
+    "verified_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "batch_number",
+    "shift_date",
+    "input_kg",
+    "output_kg"
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "name": "PackagingMovement",
+  "type": "object",
+  "properties": {
+    "item_id": {
+      "type": "string",
+      "description": "Packaging item the movement belongs to"
+    },
+    "item_code": {
+      "type": "string"
+    },
+    "item_name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "In",
+        "Use",
+        "Adjustment"
+      ],
+      "default": "In",
+      "description": "Stock in, stock out or a count correction"
+    },
+    "quantity": {
+      "type": "number",
+      "description": "Positive amount for In / Use; signed difference for an Adjustment"
+    },
+    "movement_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "batch_number": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product Master item the stock was issued for"
+    },
+    "product_code": {
+      "type": "string",
+      "description": "Item Code from the Product Master, when the issue was for a product"
+    },
+    "rack_location": {
+      "type": "string"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "supplier": {
+      "type": "string"
+    },
+    "delivery_note": {
+      "type": "string"
+    },
+    "production_order": {
+      "type": "string",
+      "description": "Production order / batch or project the stock went to"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "remarks": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "description": "Screen that recorded it: Stock in, Stock use, Stock count, Goods Issued"
+    },
+    "group_id": {
+      "type": "string",
+      "description": "Links the lines of one delivery note"
+    },
+    "approval_id": {
+      "type": "string",
+      "description": "Approval that produced this movement"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "type",
+    "quantity"
+  ]
+}

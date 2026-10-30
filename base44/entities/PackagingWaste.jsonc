@@ -1,0 +1,103 @@
+{
+  "name": "PackagingWaste",
+  "type": "object",
+  "properties": {
+    "waste_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Night"
+      ],
+      "default": "Morning"
+    },
+    "film_m": {
+      "type": "number",
+      "default": 0,
+      "description": "Film wasted in metres"
+    },
+    "film_kg": {
+      "type": "number",
+      "default": 0,
+      "description": "Film wasted in kg, when weighed instead of measured"
+    },
+    "cartons": {
+      "type": "number",
+      "default": 0,
+      "description": "Cartons wasted (pieces)"
+    },
+    "labels": {
+      "type": "number",
+      "default": 0,
+      "description": "Labels wasted (pieces)"
+    },
+    "pouches": {
+      "type": "number",
+      "default": 0,
+      "description": "Pouches wasted (pieces)"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Waste reason from the list managed in Settings"
+    },
+    "used_units": {
+      "type": "number",
+      "description": "Pieces issued from Packaging Stock to this line on the day"
+    },
+    "waste_units": {
+      "type": "number",
+      "description": "cartons + labels + pouches"
+    },
+    "waste_pct": {
+      "type": "number",
+      "description": "waste pieces / issued pieces x 100"
+    },
+    "exceeded": {
+      "type": "boolean",
+      "default": false,
+      "description": "Waste % is above the threshold in Settings"
+    },
+    "source": {
+      "type": "string",
+      "description": "Where the figures came from: Daily Packaging Entry or Manual"
+    },
+    "shift_log_id": {
+      "type": "string",
+      "description": "ShiftLog record the waste was pulled from"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Verified"
+      ],
+      "default": "Draft"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "verified_by": {
+      "type": "string"
+    },
+    "verified_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "waste_date",
+    "production_line"
+  ]
+}

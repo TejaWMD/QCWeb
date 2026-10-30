@@ -1,0 +1,122 @@
+{
+  "name": "FillCheck",
+  "type": "object",
+  "properties": {
+    "check_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "check_time": {
+      "type": "string",
+      "description": "Time of the check (HH:MM)"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Night"
+      ],
+      "default": "Morning"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "product_code": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "batch_number": {
+      "type": "string"
+    },
+    "target_weight_g": {
+      "type": "number",
+      "description": "Target net weight from Product Master"
+    },
+    "lower_limit_g": {
+      "type": "number",
+      "description": "Underweight limit from Product Master"
+    },
+    "samples": {
+      "type": "array",
+      "description": "Sample pack weights in grams",
+      "items": {
+        "type": "number"
+      },
+      "default": []
+    },
+    "sample_count": {
+      "type": "number"
+    },
+    "avg_g": {
+      "type": "number",
+      "description": "Average weight of the samples"
+    },
+    "giveaway_g": {
+      "type": "number",
+      "description": "Average minus target"
+    },
+    "giveaway_pct": {
+      "type": "number",
+      "description": "giveaway / target x 100"
+    },
+    "cost_per_kg": {
+      "type": "number",
+      "description": "Product cost per kg, copied from Product Master"
+    },
+    "packs_in_batch": {
+      "type": "number",
+      "description": "cartons x carton size for the batch"
+    },
+    "cost_per_batch": {
+      "type": "number",
+      "description": "Giveaway kg per pack x packs in batch x cost per kg"
+    },
+    "underweight_count": {
+      "type": "number",
+      "description": "Samples below the underweight limit"
+    },
+    "compliance_risk": {
+      "type": "boolean",
+      "default": false,
+      "description": "At least one sample was below the underweight limit"
+    },
+    "capa_id": {
+      "type": "string",
+      "description": "CAPA raised for the compliance risk"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Verified"
+      ],
+      "default": "Draft"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "verified_by": {
+      "type": "string"
+    },
+    "verified_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "check_date",
+    "production_line",
+    "target_weight_g"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "name": "StaffingRecord",
+  "type": "object",
+  "properties": {
+    "production_line": {
+      "type": "string"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Night"
+      ],
+      "default": "Morning",
+      "description": "Shift A (Day) = Morning, Shift B (Night) = Night"
+    },
+    "planned_headcount": {
+      "type": "number",
+      "description": "People planned for the shift"
+    },
+    "actual_headcount": {
+      "type": "number",
+      "description": "People on shift"
+    },
+    "gap_logged": {
+      "type": "boolean",
+      "default": false,
+      "description": "A staffing gap was logged"
+    },
+    "gap_reason": {
+      "type": "string",
+      "description": "Why the gap exists"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Supervisor accountable for coverage"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the staffing gap must be resolved by"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "In Progress",
+        "Overdue",
+        "Completed",
+        "Verified"
+      ],
+      "default": "Open"
+    },
+    "evidence_file_uri": {
+      "type": "string",
+      "description": "Evidence attachment (stored privately)"
+    },
+    "evidence_file_name": {
+      "type": "string",
+      "description": "Evidence attachment file name"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "production_line",
+    "shift_date"
+  ]
+}

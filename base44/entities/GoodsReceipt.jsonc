@@ -1,0 +1,81 @@
+{
+  "name": "GoodsReceipt",
+  "type": "object",
+  "properties": {
+    "receipt_group_id": {
+      "type": "string",
+      "description": "Groups every line keyed in on the same delivery receipt"
+    },
+    "date_received": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the goods were received"
+    },
+    "supplier": {
+      "type": "string"
+    },
+    "delivery_note": {
+      "type": "string",
+      "description": "Supplier delivery note number (optional)"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product Master item, filled when the received code is a finished good"
+    },
+    "product_code": {
+      "type": "string",
+      "description": "Item Code from the Product Master, when the line is a product"
+    },
+    "item_code": {
+      "type": "string"
+    },
+    "product_description": {
+      "type": "string",
+      "description": "Auto-filled from the item list, editable"
+    },
+    "batch_number": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "number",
+      "description": "Quantity received; must be greater than zero"
+    },
+    "unit": {
+      "type": "string",
+      "description": "Unit of measure (pcs, kg, carton, pallet, ...)"
+    },
+    "rack_location": {
+      "type": "string",
+      "description": "Rack code the goods were stored in (e.g. A-01-1)"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "remarks": {
+      "type": "string"
+    },
+    "received_by": {
+      "type": "string",
+      "description": "Name of the person who keyed the entry in"
+    },
+    "received_by_id": {
+      "type": "string",
+      "description": "User id of the person who keyed the entry in"
+    },
+    "edited_by": {
+      "type": "string",
+      "description": "Who last edited this entry"
+    },
+    "edited_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "date_received",
+    "item_code",
+    "batch_number",
+    "quantity"
+  ]
+}

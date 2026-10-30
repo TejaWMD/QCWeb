@@ -1,0 +1,183 @@
+{
+  "name": "ProductionOrder",
+  "type": "object",
+  "properties": {
+    "order_number": {
+      "type": "string",
+      "description": "Auto-generated order number, e.g. PO-0001"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product from the Product Master"
+    },
+    "product_code": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "customer": {
+      "type": "string",
+      "description": "Customer the order is for (optional)"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "Low",
+        "Normal",
+        "High",
+        "Urgent"
+      ],
+      "default": "Normal"
+    },
+    "quantity_cartons": {
+      "type": "number",
+      "description": "Target quantity in cartons"
+    },
+    "batch_cartons": {
+      "type": "number",
+      "description": "Standard batch size in cartons, copied from the product"
+    },
+    "batches": {
+      "type": "number",
+      "description": "Number of batches the order needs (quantity / standard batch size)"
+    },
+    "produced_cartons": {
+      "type": "number",
+      "default": 0,
+      "description": "Cartons recorded through batch labels, updated every time a batch is saved"
+    },
+    "recorded_batches": {
+      "type": "array",
+      "description": "Batches created on the Create Batch page for this order",
+      "items": {
+        "type": "object",
+        "properties": {
+          "batch_number": {
+            "type": "string"
+          },
+          "cartons": {
+            "type": "number"
+          },
+          "record_id": {
+            "type": "string"
+          },
+          "recorded_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recorded_by": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "machine": {
+      "type": "string",
+      "description": "Machine name; matches a machine on the Machines list"
+    },
+    "machine_id": {
+      "type": "string"
+    },
+    "capacity_cph": {
+      "type": "number",
+      "description": "Machine capacity in cartons per hour used for the run-time estimate"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "planned_start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Planned production start"
+    },
+    "planned_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Planned production end, from the estimated run time"
+    },
+    "actual_start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When production staff pressed Start"
+    },
+    "actual_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When production staff pressed Finish"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Planned",
+        "In Progress",
+        "Completed",
+        "Cancelled"
+      ],
+      "default": "Planned"
+    },
+    "batch_codes": {
+      "type": "array",
+      "description": "Batch numbers generated from the batch pattern, one per batch",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "plan_changes": {
+      "type": "array",
+      "description": "Every move of the order on the schedule, with the reason given",
+      "items": {
+        "type": "object",
+        "properties": {
+          "changed_at": {
+            "type": "string"
+          },
+          "changed_by": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "from_machine": {
+            "type": "string"
+          },
+          "to_machine": {
+            "type": "string"
+          },
+          "from_start": {
+            "type": "string"
+          },
+          "to_start": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "notes": {
+      "type": "string"
+    },
+    "deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Soft deleted: kept for the Recently Deleted page"
+    },
+    "deleted_by": {
+      "type": "string"
+    },
+    "deleted_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "order_number",
+    "product_id",
+    "quantity_cartons",
+    "planned_start",
+    "status"
+  ]
+}

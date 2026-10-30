@@ -1,0 +1,79 @@
+{
+  "name": "HalalVerification",
+  "type": "object",
+  "properties": {
+    "item_type": {
+      "type": "string",
+      "enum": [
+        "Batch",
+        "Ingredient"
+      ],
+      "default": "Batch",
+      "description": "Whether this is a batch or an ingredient verification"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product Master item this verification is for"
+    },
+    "product_code": {
+      "type": "string",
+      "description": "Item Code from the Product Master"
+    },
+    "item_name": {
+      "type": "string",
+      "description": "Batch number or ingredient name"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the verification"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the verification is due"
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Halal verification performed and passed"
+    },
+    "verifier": {
+      "type": "string",
+      "description": "Who verified halal status"
+    },
+    "certificate_file_uri": {
+      "type": "string",
+      "description": "Halal certificate attachment (stored privately)"
+    },
+    "certificate_file_name": {
+      "type": "string",
+      "description": "Halal certificate file name"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Person accountable for the verification"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "In Progress",
+        "Overdue",
+        "Completed",
+        "Verified"
+      ],
+      "default": "Open"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_name",
+    "shift_date"
+  ]
+}

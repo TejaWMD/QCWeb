@@ -1,0 +1,84 @@
+{
+  "name": "ProductHold",
+  "type": "object",
+  "properties": {
+    "production_line": {
+      "type": "string"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the hold was raised"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product Master item placed on hold"
+    },
+    "product_code": {
+      "type": "string",
+      "description": "Item Code from the Product Master"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "batch_number": {
+      "type": "string"
+    },
+    "hold_qty": {
+      "type": "number",
+      "description": "Units placed on hold"
+    },
+    "hold_reason": {
+      "type": "string",
+      "description": "Why the product is held"
+    },
+    "held_by": {
+      "type": "string",
+      "description": "Who raised the hold"
+    },
+    "release_approval": {
+      "type": "string",
+      "description": "Who approved the release"
+    },
+    "released_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Person accountable for disposition"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the hold disposition is due"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "In Progress",
+        "Overdue",
+        "Completed",
+        "Verified"
+      ],
+      "default": "Open"
+    },
+    "evidence_file_uri": {
+      "type": "string",
+      "description": "Evidence attachment (stored privately)"
+    },
+    "evidence_file_name": {
+      "type": "string",
+      "description": "Evidence attachment file name"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "production_line",
+    "shift_date",
+    "hold_reason"
+  ]
+}

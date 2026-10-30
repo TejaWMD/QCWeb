@@ -1,0 +1,129 @@
+{
+  "name": "BatchRecord",
+  "type": "object",
+  "properties": {
+    "product_id": {
+      "type": "string",
+      "description": "Product from the Product Master"
+    },
+    "product_code": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "batch_number": {
+      "type": "string",
+      "description": "Batch number; unique per product"
+    },
+    "production_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "shelf_life_days": {
+      "type": "number",
+      "description": "Shelf life used to calculate the expiry date"
+    },
+    "expiry_overridden": {
+      "type": "boolean",
+      "default": false,
+      "description": "Admin manually set the expiry date instead of the product shelf life"
+    },
+    "expiry_override_reason": {
+      "type": "string"
+    },
+    "expiry_override_by": {
+      "type": "string"
+    },
+    "quantity_cartons": {
+      "type": "number",
+      "description": "Quantity produced in cartons"
+    },
+    "machine": {
+      "type": "string",
+      "description": "Machine / line the batch was produced on"
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Production order the batch number came from"
+    },
+    "order_number": {
+      "type": "string"
+    },
+    "label_layout": {
+      "type": "string",
+      "description": "Layout id used for the printed label"
+    },
+    "label_layout_name": {
+      "type": "string"
+    },
+    "label_width_mm": {
+      "type": "number"
+    },
+    "label_height_mm": {
+      "type": "number"
+    },
+    "label_font_size": {
+      "type": "number",
+      "description": "Label font size in points"
+    },
+    "qr_mm": {
+      "type": "number"
+    },
+    "qr_ecc": {
+      "type": "string",
+      "description": "QR error correction level (L, M, Q, H)"
+    },
+    "trace_url": {
+      "type": "string",
+      "description": "Traceability page the QR code opens"
+    },
+    "created_by_name": {
+      "type": "string"
+    },
+    "created_by_id": {
+      "type": "string"
+    },
+    "print_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Labels printed with the first save"
+    },
+    "reprints": {
+      "type": "array",
+      "description": "Every reprint, with who printed and when",
+      "items": {
+        "type": "object",
+        "properties": {
+          "user_name": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "copies": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "product_id",
+    "batch_number",
+    "production_date",
+    "expiry_date"
+  ]
+}

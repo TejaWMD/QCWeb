@@ -1,0 +1,62 @@
+{
+  "name": "YieldLossSettings",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Settings document key (yield_loss)"
+    },
+    "yield_tolerance_pct": {
+      "type": "number",
+      "default": 1.5,
+      "description": "Shortfall below the recipe standard yield that is still accepted before a batch is flagged red"
+    },
+    "packaging_waste_threshold_pct": {
+      "type": "number",
+      "default": 3,
+      "description": "Packaging waste % above this is flagged"
+    },
+    "max_rework_pct": {
+      "type": "number",
+      "default": 2,
+      "description": "Maximum rework allowed per batch, as a % of that batch's output"
+    },
+    "waste_reasons": {
+      "type": "array",
+      "description": "Waste reason dropdown values",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "Changeover",
+        "Jam",
+        "Misprint",
+        "Damaged roll",
+        "Setup",
+        "Other"
+      ]
+    },
+    "rework_reasons": {
+      "type": "array",
+      "description": "Rework reason dropdown values",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "Off-spec viscosity",
+        "Overfill",
+        "Label error",
+        "Machine start-up",
+        "Power interruption",
+        "Expired material",
+        "Other"
+      ]
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "key"
+  ]
+}

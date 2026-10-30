@@ -1,0 +1,109 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "event_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Exact timestamp of the event"
+    },
+    "event_stamp": {
+      "type": "string",
+      "description": "Timestamp shown as YYYY-MM-DD HH:MM:SS (plant time)"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Who performed the action, or 'System' for automatic actions"
+    },
+    "actor_type": {
+      "type": "string",
+      "enum": [
+        "User",
+        "System"
+      ],
+      "default": "User",
+      "description": "Whether a person or the app itself performed the action"
+    },
+    "module": {
+      "type": "string",
+      "description": "Module the action was performed in"
+    },
+    "action": {
+      "type": "string",
+      "description": "Action performed (Created, Updated, Verified, Deleted)"
+    },
+    "entity": {
+      "type": "string",
+      "description": "Data table the action changed (e.g. Product, BatchRecord)"
+    },
+    "record_id": {
+      "type": "string",
+      "description": "Record the entry refers to"
+    },
+    "details": {
+      "type": "string",
+      "description": "Readable summary of the action"
+    },
+    "old_value": {
+      "type": "string",
+      "description": "Value before the change (e.g. previous status)"
+    },
+    "new_value": {
+      "type": "string",
+      "description": "Value after the change (e.g. new status)"
+    },
+    "changes": {
+      "type": "array",
+      "description": "One line per field that changed, e.g. 'Status: Open \u2192 Verified'",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "event_time",
+    "module",
+    "action"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "user"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "user"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

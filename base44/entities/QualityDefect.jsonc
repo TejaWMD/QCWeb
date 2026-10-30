@@ -1,0 +1,93 @@
+{
+  "name": "QualityDefect",
+  "type": "object",
+  "properties": {
+    "production_line": {
+      "type": "string"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Night"
+      ],
+      "default": "Morning",
+      "description": "Shift A (Day) = Morning, Shift B (Night) = Night"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product Master item the defect was found on"
+    },
+    "product_code": {
+      "type": "string",
+      "description": "Item Code from the Product Master"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "batch_number": {
+      "type": "string"
+    },
+    "defect_type": {
+      "type": "string",
+      "description": "Defect description (e.g. sealing, labelling, weight)"
+    },
+    "defect_qty": {
+      "type": "number",
+      "description": "Defective units found"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "Minor",
+        "Major",
+        "Critical"
+      ],
+      "default": "Minor"
+    },
+    "detected_by": {
+      "type": "string",
+      "description": "Who detected the defect"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Person accountable for disposition"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the disposition is due"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "In Progress",
+        "Overdue",
+        "Completed",
+        "Verified"
+      ],
+      "default": "Open"
+    },
+    "evidence_file_uri": {
+      "type": "string",
+      "description": "Evidence attachment (stored privately)"
+    },
+    "evidence_file_name": {
+      "type": "string",
+      "description": "Evidence attachment file name"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "production_line",
+    "shift_date",
+    "defect_type"
+  ]
+}

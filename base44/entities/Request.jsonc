@@ -1,0 +1,291 @@
+{
+  "name": "Request",
+  "type": "object",
+  "properties": {
+    "request_type": {
+      "type": "string",
+      "enum": [
+        "Item / Material Request",
+        "Approval Request"
+      ],
+      "description": "Type of request (Downtime / Stoppage records stay in their own entity)"
+    },
+    "production_line": {
+      "type": "string",
+      "description": "Production line the request relates to"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the shift (downtime records only; item and approval requests do not use it)"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Night"
+      ],
+      "default": "Morning",
+      "description": "Shift A (Day) = Morning, Shift B (Night) = Night"
+    },
+    "requester_name": {
+      "type": "string",
+      "description": "Who submitted the request"
+    },
+    "requester_id": {
+      "type": "string",
+      "description": "User id of the requester; nobody can decide on their own request"
+    },
+    "owners": {
+      "type": "array",
+      "description": "Teams the request is routed to (Maintenance, QA/QC Team, MD, Warehouse)",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "item_name": {
+      "type": "string",
+      "description": "Item / Material Request: item requested"
+    },
+    "quantity": {
+      "type": "number",
+      "description": "Item / Material Request: quantity needed"
+    },
+    "unit": {
+      "type": "string",
+      "description": "Item / Material Request: unit of measure"
+    },
+    "urgency": {
+      "type": "string",
+      "enum": [
+        "Normal",
+        "Urgent",
+        "Line stopped"
+      ],
+      "default": "Normal"
+    },
+    "needed_by_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Item / Material Request: date the item is needed by"
+    },
+    "item_category": {
+      "type": "string",
+      "description": "Item / Material Request: Tools & Equipment, Spare Part, Packaging, Raw Material, PPE, Cleaning Supplies, Other"
+    },
+    "where_used": {
+      "type": "string",
+      "description": "Item / Material Request: line / station where it will be used"
+    },
+    "expected_benefit": {
+      "type": "string",
+      "description": "Item / Material Request: expected benefit (saves time / improves accuracy / safety / hygiene)"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Why the request is needed"
+    },
+    "estimated_cost": {
+      "type": "number",
+      "description": "Estimated cost (optional)"
+    },
+    "approval_type": {
+      "type": "string",
+      "description": "Approval Request: Labelling / Packaging Error, Overtime, Line Restart after Stoppage, Rework / Reprocessing, Release of Held Product, SOP / Specification Deviation, Schedule Change, Purchase / Spending, Other"
+    },
+    "description": {
+      "type": "string",
+      "description": "Approval Request: description of the issue"
+    },
+    "product_sku": {
+      "type": "string",
+      "description": "Approval Request: product / SKU"
+    },
+    "batch_number": {
+      "type": "string",
+      "description": "Approval Request: batch number"
+    },
+    "order_number": {
+      "type": "string",
+      "description": "Approval Request: order number"
+    },
+    "quantity_affected": {
+      "type": "number",
+      "description": "Approval Request: quantity affected"
+    },
+    "proposed_action": {
+      "type": "string",
+      "description": "Approval Request: Rework / Reprint / Hold / Scrap / Proceed with approval"
+    },
+    "impact_if_not_approved": {
+      "type": "string",
+      "description": "Approval Request: impact if the request is not approved"
+    },
+    "requested_datetime": {
+      "type": "string",
+      "description": "Approval Request: requested date/time (legacy field, kept for existing records)"
+    },
+    "needed_by_datetime": {
+      "type": "string",
+      "description": "Approval Request: date/time the action is needed by"
+    },
+    "printed_value": {
+      "type": "string",
+      "description": "Labelling / Packaging Error: value that was printed"
+    },
+    "correct_value": {
+      "type": "string",
+      "description": "Labelling / Packaging Error: correct value"
+    },
+    "printed_item": {
+      "type": "string",
+      "description": "Labelling / Packaging Error: what was printed (date code, shelf life, barcode, halal logo, allergen, ingredients)"
+    },
+    "qty_produced": {
+      "type": "number",
+      "description": "Labelling / Packaging Error: quantity already produced"
+    },
+    "already_packed": {
+      "type": "string",
+      "enum": [
+        "No",
+        "Yes"
+      ],
+      "default": "No",
+      "description": "Labelling / Packaging Error: whether product was already packed or dispatched"
+    },
+    "packed_qty": {
+      "type": "number",
+      "description": "Labelling / Packaging Error: quantity already packed or dispatched"
+    },
+    "line_stopped": {
+      "type": "string",
+      "enum": [
+        "No",
+        "Yes"
+      ],
+      "default": "No",
+      "description": "Labelling / Packaging Error: whether the line is stopped"
+    },
+    "ot_workers": {
+      "type": "number",
+      "description": "Overtime: number of workers"
+    },
+    "ot_hours": {
+      "type": "number",
+      "description": "Overtime: hours"
+    },
+    "ot_reason": {
+      "type": "string",
+      "description": "Overtime: reason"
+    },
+    "ot_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Overtime: date"
+    },
+    "rework_reason": {
+      "type": "string",
+      "description": "Rework / Reprocessing: reason"
+    },
+    "rework_method": {
+      "type": "string",
+      "description": "Rework / Reprocessing: method"
+    },
+    "qa_signoff": {
+      "type": "string",
+      "description": "Rework / Reprocessing: QA/QC sign-off"
+    },
+    "hold_reference": {
+      "type": "string",
+      "description": "Release of Held Product: hold reference"
+    },
+    "qa_decision": {
+      "type": "string",
+      "description": "Release of Held Product: QA/QC decision"
+    },
+    "purchase_amount": {
+      "type": "number",
+      "description": "Purchase / Spending: amount"
+    },
+    "sop_reference": {
+      "type": "string",
+      "description": "SOP Deviation: SOP reference"
+    },
+    "sop_deviation": {
+      "type": "string",
+      "description": "SOP Deviation: the deviation"
+    },
+    "sop_risk": {
+      "type": "string",
+      "description": "SOP Deviation: risk"
+    },
+    "sop_duration": {
+      "type": "string",
+      "description": "SOP Deviation: duration"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Submitted",
+        "Under Review",
+        "Approved",
+        "Rejected",
+        "Returned for more info",
+        "Fulfilled",
+        "Completed"
+      ],
+      "default": "Submitted"
+    },
+    "decided_by": {
+      "type": "string",
+      "description": "Who approved, rejected or returned the request"
+    },
+    "decided_by_id": {
+      "type": "string",
+      "description": "User id of the decision maker"
+    },
+    "decided_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the decision was recorded"
+    },
+    "decision_comment": {
+      "type": "string",
+      "description": "Comment from the decision maker (required for Reject and Return)"
+    },
+    "evidence_files": {
+      "type": "array",
+      "description": "Evidence attachments (stored privately) with caption, uploader and time",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file_uri": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "uploaded_by": {
+            "type": "string"
+          },
+          "uploaded_date": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "request_type",
+    "requester_name"
+  ]
+}

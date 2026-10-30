@@ -1,0 +1,85 @@
+{
+  "name": "CAPA",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Corrective and preventive action title"
+    },
+    "source_module": {
+      "type": "string",
+      "description": "Where the CAPA originated (Defect, Failed HACCP Check, Downtime Event, Audit Finding, Other)"
+    },
+    "source_record_id": {
+      "type": "string",
+      "description": "Record that triggered this CAPA (used to avoid duplicate drafts)"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the CAPA was raised"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "When the CAPA must be closed"
+    },
+    "description": {
+      "type": "string",
+      "description": "Problem description"
+    },
+    "root_cause": {
+      "type": "string",
+      "description": "Root cause identified"
+    },
+    "corrective_action": {
+      "type": "string",
+      "description": "Immediate corrective action taken"
+    },
+    "preventive_action": {
+      "type": "string",
+      "description": "Preventive action to stop recurrence"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Person accountable for the CAPA"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "In Progress",
+        "Overdue",
+        "Completed",
+        "Verified"
+      ],
+      "default": "Open"
+    },
+    "evidence_file_uri": {
+      "type": "string",
+      "description": "Evidence attachment required to close the CAPA (stored privately)"
+    },
+    "evidence_file_name": {
+      "type": "string",
+      "description": "Evidence attachment file name"
+    },
+    "verified_by": {
+      "type": "string",
+      "description": "Manager who verified the CAPA"
+    },
+    "verification_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "shift_date"
+  ]
+}

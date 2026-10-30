@@ -1,0 +1,51 @@
+{
+  "name": "LabelSettings",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Settings document key (labels)"
+    },
+    "layouts": {
+      "type": "array",
+      "description": "Label layouts offered on the Create Batch page; edited by Admin in Settings",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "width_mm": {
+            "type": "number"
+          },
+          "height_mm": {
+            "type": "number"
+          },
+          "font_size": {
+            "type": "number"
+          },
+          "qr_mm": {
+            "type": "number"
+          },
+          "qr_ecc": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "default_layout_id": {
+      "type": "string",
+      "description": "Layout used when a product has no saved default"
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "key"
+  ]
+}

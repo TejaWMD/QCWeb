@@ -1,0 +1,23 @@
+{
+  "name": "WarehouseSettings",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Settings document key (warehouse)"
+    },
+    "units": {
+      "type": "array",
+      "description": "Units of measure offered on the receiving form",
+      "items": {
+        "type": "string"
+      }
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "key"
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "name": "Recipe",
+  "type": "object",
+  "properties": {
+    "recipe_name": {
+      "type": "string",
+      "description": "Recipe name from the product datasheet; one record per unique recipe"
+    },
+    "product_ids": {
+      "type": "array",
+      "description": "Products that use this recipe (they all link to this one record)",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "cooking_time_hr": {
+      "type": "number",
+      "description": "Cooking time in hours taken from the products using this recipe"
+    },
+    "batch_output_kg": {
+      "type": "number",
+      "description": "Batch output in kg taken from the products using this recipe"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "First product using this recipe (kept for older recipe screens)"
+    },
+    "product_code": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "number",
+      "default": 1,
+      "description": "Version number; older versions are kept as Superseded"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Superseded"
+      ],
+      "default": "Active",
+      "description": "Only one version per product is Active"
+    },
+    "batch_cartons": {
+      "type": "number",
+      "description": "Cartons one batch produces, used to scale ingredient quantities"
+    },
+    "standard_yield_pct": {
+      "type": "number",
+      "description": "Standard yield % for this recipe; batch yield is measured against it"
+    },
+    "ingredients": {
+      "type": "array",
+      "description": "Ingredient list with quantity per batch",
+      "items": {
+        "type": "object",
+        "properties": {
+          "material_id": {
+            "type": "string"
+          },
+          "item_code": {
+            "type": "string"
+          },
+          "material_name": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "quantity_per_batch": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this version takes effect"
+    },
+    "superseded_by_version": {
+      "type": "number",
+      "description": "Version that replaced this one"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Who saved this version"
+    },
+    "created_by_id": {
+      "type": "string",
+      "description": "User id of who saved this version"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "product_id",
+    "version"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "name": "ProductSettings",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Settings document key (product_master)"
+    },
+    "brands": {
+      "type": "array",
+      "description": "Brand list offered on the product datasheet and created by imports",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "channels": {
+      "type": "array",
+      "description": "Customer / channel list offered on the product datasheet",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "mapping": {
+      "type": "string",
+      "description": "Saved import column mapping, stored as JSON"
+    },
+    "mapping_signature": {
+      "type": "string",
+      "description": "Header signature the saved mapping belongs to"
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "key"
+  ]
+}

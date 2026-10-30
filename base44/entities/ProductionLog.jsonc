@@ -1,0 +1,73 @@
+{
+  "name": "ProductionLog",
+  "type": "object",
+  "properties": {
+    "production_line": {
+      "type": "string",
+      "description": "Production line the output was produced on"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the shift"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Night"
+      ],
+      "default": "Morning",
+      "description": "Shift A (Day) = Morning, Shift B (Night) = Night"
+    },
+    "product_name": {
+      "type": "string",
+      "description": "Product produced"
+    },
+    "batch_number": {
+      "type": "string"
+    },
+    "planned_qty": {
+      "type": "number",
+      "description": "Target units for the shift"
+    },
+    "actual_output": {
+      "type": "number",
+      "description": "Good units produced"
+    },
+    "downtime_min": {
+      "type": "number",
+      "description": "Downtime minutes during the shift"
+    },
+    "order_status": {
+      "type": "string",
+      "enum": [
+        "on_track",
+        "at_risk",
+        "completed"
+      ],
+      "default": "on_track",
+      "description": "Order fulfilment status"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Person accountable for this log"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "Verified"
+      ],
+      "default": "Open",
+      "description": "Verification status"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "production_line",
+    "shift_date"
+  ]
+}

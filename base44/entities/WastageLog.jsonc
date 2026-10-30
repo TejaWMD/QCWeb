@@ -1,0 +1,142 @@
+{
+  "name": "WastageLog",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "product_type": {
+      "type": "string"
+    },
+    "batch_number": {
+      "type": "string"
+    },
+    "operation_log_id": {
+      "type": "string",
+      "description": "Operation record this wastage entry was branched from"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Shift log session this wastage entry is synced from"
+    },
+    "total_waste": {
+      "type": "number",
+      "description": "Rejected / wasted quantity carried from the operation record",
+      "default": 0
+    },
+    "bottle_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "jar_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "plastic_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "pouch_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "foil_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "cup_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "tub_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "cap_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "lid_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "packet_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "shrink_label_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "label_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "extra_sticker_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "carton_box_waste": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "date",
+    "product_name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "user"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "user"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

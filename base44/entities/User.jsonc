@@ -1,0 +1,75 @@
+{
+  "properties": {
+    "role": {
+      "type": "string",
+      "description": "The role of the user in the app",
+      "enum": [
+        "admin",
+        "user"
+      ]
+    },
+    "app_role": {
+      "type": "string",
+      "description": "FactoryOps role; grants a fixed preset of modules",
+      "enum": [
+        "operator",
+        "supervisor",
+        "qa_officer",
+        "manager"
+      ],
+      "rls": {
+        "update": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    },
+    "line": {
+      "type": "string",
+      "description": "Production line this member works on",
+      "rls": {
+        "update": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    },
+    "permissions": {
+      "type": "array",
+      "description": "Module keys this user is granted; managed by administrators",
+      "items": {
+        "type": "string"
+      },
+      "rls": {
+        "update": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "description": "Whether the member's access is active or suspended",
+      "enum": [
+        "active",
+        "suspended"
+      ],
+      "default": "active",
+      "rls": {
+        "update": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "role"
+  ],
+  "name": "User",
+  "type": "object"
+}

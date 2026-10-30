@@ -1,0 +1,92 @@
+{
+  "name": "HACCPCheck",
+  "type": "object",
+  "properties": {
+    "check_name": {
+      "type": "string",
+      "description": "HACCP / CCP check performed"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Night"
+      ],
+      "default": "Morning",
+      "description": "Shift A (Day) = Morning, Shift B (Night) = Night"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the check is due"
+    },
+    "scheduled_time": {
+      "type": "string",
+      "description": "Scheduled time of the check (HH:MM, plant time)"
+    },
+    "critical_limit": {
+      "type": "string",
+      "description": "Critical limit value the check must meet"
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Pass",
+        "Fail"
+      ],
+      "default": "Pending",
+      "description": "Critical limits result"
+    },
+    "checked_by": {
+      "type": "string",
+      "description": "Who performed the check"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Person accountable for completing the check"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "In Progress",
+        "Overdue",
+        "Completed",
+        "Verified"
+      ],
+      "default": "Open"
+    },
+    "evidence_file_uri": {
+      "type": "string",
+      "description": "Evidence attachment (stored privately)"
+    },
+    "evidence_file_name": {
+      "type": "string",
+      "description": "Evidence attachment file name"
+    },
+    "verified_by": {
+      "type": "string"
+    },
+    "halal_verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Halal verification performed and passed"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "check_name",
+    "production_line",
+    "shift_date"
+  ]
+}

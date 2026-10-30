@@ -1,0 +1,92 @@
+{
+  "name": "ActivityLog",
+  "type": "object",
+  "properties": {
+    "event_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Exact timestamp of the event"
+    },
+    "event_stamp": {
+      "type": "string",
+      "description": "Timestamp shown as YYYY-MM-DD HH:MM:SS (plant time)"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Name of the user who submitted or changed the record"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "New Entry Created",
+        "Data Modified",
+        "Data Deleted"
+      ]
+    },
+    "module": {
+      "type": "string",
+      "description": "Page / module the change was made in (Shift Log, Operation Record, Overtime Record, Wastage Record)"
+    },
+    "record_id": {
+      "type": "string",
+      "description": "Record this activity refers to"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Shift log session the records belong to"
+    },
+    "details": {
+      "type": "string",
+      "description": "Readable summary of the change"
+    },
+    "changes": {
+      "type": "array",
+      "description": "Field names with their before and after values",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "event_time",
+    "action_type",
+    "module"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "user"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

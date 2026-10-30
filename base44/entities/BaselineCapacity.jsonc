@@ -1,0 +1,126 @@
+{
+  "name": "BaselineCapacity",
+  "type": "object",
+  "properties": {
+    "product_name": {
+      "type": "string"
+    },
+    "thermal_state": {
+      "type": "string"
+    },
+    "packing_line_code": {
+      "type": "string"
+    },
+    "line_setup": {
+      "type": "string"
+    },
+    "remark_downtime": {
+      "type": "string"
+    },
+    "packaging_config_type": {
+      "type": "string"
+    },
+    "next_step": {
+      "type": "string"
+    },
+    "machine_setup_time_min": {
+      "type": "number"
+    },
+    "acceptable_downtime_min": {
+      "type": "number"
+    },
+    "manpower_req": {
+      "type": "number"
+    },
+    "unit_per_cycle": {
+      "type": "string"
+    },
+    "unit_per_minute": {
+      "type": "number"
+    },
+    "theoretical_uph": {
+      "type": "number"
+    },
+    "adjusted_uph": {
+      "type": "number"
+    },
+    "changeover_complexity": {
+      "type": "string",
+      "enum": [
+        "Low",
+        "Medium",
+        "High"
+      ]
+    },
+    "remarks_viscosity": {
+      "type": "string"
+    },
+    "remarks_thermal": {
+      "type": "string"
+    },
+    "remarks_packaging": {
+      "type": "string"
+    },
+    "access_scopes": {
+      "type": "array",
+      "description": "Modules that may read this record",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "baseline_capacity"
+      ]
+    }
+  },
+  "required": [
+    "product_name",
+    "packing_line_code"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.access_scopes": {
+            "$in": "{{user.data.permissions}}"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "user"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

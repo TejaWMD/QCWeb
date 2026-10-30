@@ -1,0 +1,57 @@
+{
+  "name": "PackagingItem",
+  "type": "object",
+  "properties": {
+    "item_code": {
+      "type": "string",
+      "description": "Unique packaging material code"
+    },
+    "description": {
+      "type": "string",
+      "description": "Item name / description"
+    },
+    "category": {
+      "type": "string",
+      "description": "Category from the managed category list (Labels, Cartons, ...)"
+    },
+    "unit": {
+      "type": "string",
+      "description": "Unit of measure (PCS, kg, roll, box, ...)"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 0,
+      "description": "Current stock on hand"
+    },
+    "min_level": {
+      "type": "number",
+      "default": 0,
+      "description": "Minimum level; stock at or below this is low"
+    },
+    "default_rack": {
+      "type": "string",
+      "description": "Default rack location"
+    },
+    "supplier": {
+      "type": "string",
+      "description": "Usual supplier (optional)"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Inactive items stay in the history but leave the working list"
+    },
+    "linked_product": {
+      "type": "string",
+      "description": "Product this packaging item is used for; drives the packaging-at-risk warning"
+    },
+    "qty_per_unit": {
+      "type": "number",
+      "default": 0,
+      "description": "Units of this item used per finished unit"
+    }
+  },
+  "required": [
+    "item_code"
+  ]
+}

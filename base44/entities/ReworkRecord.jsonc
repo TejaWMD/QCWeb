@@ -1,0 +1,119 @@
+{
+  "name": "ReworkRecord",
+  "type": "object",
+  "properties": {
+    "rework_lot_id": {
+      "type": "string",
+      "description": "Rework lot ID, e.g. RW-28102026-01"
+    },
+    "rework_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Night"
+      ],
+      "default": "Morning"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "source_batch": {
+      "type": "string",
+      "description": "Batch the rework came from"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "product_code": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "quantity_kg": {
+      "type": "number",
+      "description": "Rework quantity in kg"
+    },
+    "batch_output_kg": {
+      "type": "number",
+      "description": "Output kg of the source batch, used for the rework %"
+    },
+    "rework_pct": {
+      "type": "number",
+      "description": "Rework kg as a % of the source batch output"
+    },
+    "exceeds_max": {
+      "type": "boolean",
+      "default": false,
+      "description": "Rework % is above the maximum set in Settings"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Rework reason from the list managed in Settings"
+    },
+    "disposition": {
+      "type": "string",
+      "enum": [
+        "Reused in new batch",
+        "Reprocessed",
+        "Downgraded / sold as B-grade",
+        "Discarded"
+      ],
+      "default": "Reprocessed"
+    },
+    "reused_batch": {
+      "type": "string",
+      "description": "Batch the rework was used in (Reused in new batch)"
+    },
+    "reused_qty_kg": {
+      "type": "number"
+    },
+    "allergen_concern": {
+      "type": "boolean",
+      "default": false,
+      "description": "Allergen concern QA must clear before reuse"
+    },
+    "halal_concern": {
+      "type": "boolean",
+      "default": false,
+      "description": "Halal concern QA must clear before reuse"
+    },
+    "qa_clearance": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Cleared",
+        "Rejected"
+      ],
+      "default": "Pending",
+      "description": "QA decision on the disposition"
+    },
+    "qa_approved_by": {
+      "type": "string"
+    },
+    "qa_approved_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "Closed"
+      ],
+      "default": "Open"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "rework_lot_id",
+    "rework_date",
+    "disposition"
+  ]
+}

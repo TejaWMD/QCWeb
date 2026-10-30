@@ -1,0 +1,295 @@
+{
+  "name": "OTLog",
+  "type": "object",
+  "properties": {
+    "ot_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "operation_log_id": {
+      "type": "string",
+      "description": "Operation record this overtime entry was branched from"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Shift log session this overtime entry is synced from"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Night"
+      ],
+      "default": "Morning"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "task": {
+      "type": "string",
+      "enum": [
+        "Carton Packing",
+        "Automatic Machine Filling",
+        "Production Planning",
+        "Packaging Supervisor",
+        "Inventory Checker",
+        "Apply sticker",
+        "Put Cap (Babu Machine)",
+        "Manual Filling & Capping"
+      ]
+    },
+    "product_type": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "product_sku": {
+      "type": "string"
+    },
+    "batch_number": {
+      "type": "string"
+    },
+    "planned_ot_qty": {
+      "type": "number",
+      "default": 0
+    },
+    "actual_good_output": {
+      "type": "number",
+      "default": 0
+    },
+    "rejected_wasted_qty": {
+      "type": "number",
+      "default": 0
+    },
+    "bottle_used": {
+      "type": "number",
+      "default": 0
+    },
+    "bottle_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "jar_used": {
+      "type": "number",
+      "default": 0
+    },
+    "jar_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "plastic_used": {
+      "type": "number",
+      "default": 0
+    },
+    "plastic_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "pouch_used": {
+      "type": "number",
+      "default": 0
+    },
+    "pouch_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "foil_used": {
+      "type": "number",
+      "default": 0
+    },
+    "foil_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "cup_used": {
+      "type": "number",
+      "default": 0
+    },
+    "cup_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "tub_used": {
+      "type": "number",
+      "default": 0
+    },
+    "tub_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "cap_used": {
+      "type": "number",
+      "default": 0
+    },
+    "cap_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "lid_used": {
+      "type": "number",
+      "default": 0
+    },
+    "lid_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "packet_used": {
+      "type": "number",
+      "default": 0
+    },
+    "packet_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "shrink_label_used": {
+      "type": "number",
+      "default": 0
+    },
+    "shrink_label_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "label_used": {
+      "type": "number",
+      "default": 0
+    },
+    "label_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "extra_sticker_used": {
+      "type": "number",
+      "default": 0
+    },
+    "extra_sticker_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "carton_box_used": {
+      "type": "number",
+      "default": 0
+    },
+    "carton_box_waste": {
+      "type": "number",
+      "default": 0
+    },
+    "staff_count": {
+      "type": "number",
+      "default": 1
+    },
+    "staff_name": {
+      "type": "string"
+    },
+    "start_time": {
+      "type": "string"
+    },
+    "end_time": {
+      "type": "string"
+    },
+    "ot_objective": {
+      "type": "string"
+    },
+    "ot_start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ot_end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "planned_cartons": {
+      "type": "number",
+      "description": "Planned cartons carried over from the linked shift log",
+      "default": 0
+    },
+    "pcs_per_carton": {
+      "type": "number",
+      "description": "Pieces per carton carried over from the linked shift log",
+      "default": 0
+    },
+    "ot_duration_hours": {
+      "type": "number",
+      "description": "Overtime hours: only the hours worked after 17:00",
+      "default": 0
+    },
+    "hourly_ot_rate": {
+      "type": "number",
+      "default": 12
+    },
+    "downtime_min": {
+      "type": "number",
+      "default": 0
+    },
+    "record_batch": {
+      "type": "string",
+      "enum": [
+        "legacy",
+        "current"
+      ],
+      "default": "current"
+    },
+    "access_scopes": {
+      "type": "array",
+      "description": "Modules that may read this record",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "overtime_record"
+      ]
+    }
+  },
+  "required": [
+    "ot_date",
+    "production_line",
+    "product_name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.access_scopes": {
+            "$in": "{{user.data.permissions}}"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "user"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

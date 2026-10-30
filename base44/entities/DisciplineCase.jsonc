@@ -1,0 +1,46 @@
+{
+  "name": "DisciplineCase",
+  "type": "object",
+  "properties": {
+    "employee_name": {
+      "type": "string"
+    },
+    "production_line": {
+      "type": "string"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the case was opened"
+    },
+    "case_type": {
+      "type": "string",
+      "description": "Type of disciplinary issue"
+    },
+    "description": {
+      "type": "string"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Supervisor handling the case"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "Resolved"
+      ],
+      "default": "Open"
+    },
+    "resolution": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "employee_name",
+    "shift_date"
+  ]
+}
