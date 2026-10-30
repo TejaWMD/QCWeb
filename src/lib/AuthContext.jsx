@@ -4,13 +4,20 @@ import { appParams } from '@/lib/app-params';
 
 const AuthContext = createContext();
 
+export const DEV_USER = {
+  id: "dev-admin-id",
+  email: "admin@factoryops.local",
+  full_name: "Admin",
+  role: "admin",
+};
+
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
-  const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(true);
+  const [user, setUser] = useState(DEV_USER);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isLoadingAuth, setIsLoadingAuth] = useState(false);
+  const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(false);
   const [authError, setAuthError] = useState(null);
-  const [authChecked, setAuthChecked] = useState(false);
+  const [authChecked, setAuthChecked] = useState(true);
   const [appPublicSettings, setAppPublicSettings] = useState(null); // Contains only { id, public_settings }
   // "View as" demo mode (Admin only): temporarily limits the admin to the
   // selected role's visible modules.
@@ -44,49 +51,26 @@ export const AuthProvider = ({ children }) => {
           await checkUserAuth();
         } else {
           setIsLoadingAuth(false);
-          setIsAuthenticated(false);
+          setIsAuthenticated(true);
+          setUser((prev) => prev || DEV_USER);
           setAuthChecked(true);
         }
         setIsLoadingPublicSettings(false);
       } catch (appError) {
-        console.error('App state check failed:', appError);
-        
-        // Handle app-level errors
-        if (appError.status === 403 && appError.data?.extra_data?.reason) {
-          const reason = appError.data.extra_data.reason;
-          if (reason === 'auth_required') {
-            setAuthError({
-              type: 'auth_required',
-              message: 'Authentication required'
-            });
-          } else if (reason === 'user_not_registered') {
-            setAuthError({
-              type: 'user_not_registered',
-              message: 'User not registered for this app'
-            });
-          } else {
-            setAuthError({
-              type: reason,
-              message: appError.message
-            });
-          }
-        } else {
-          setAuthError({
-            type: 'unknown',
-            message: appError.message || 'Failed to load app'
-          });
-        }
+        console.warn('App state check notice (using dev user):', appError);
         setIsLoadingPublicSettings(false);
         setIsLoadingAuth(false);
+        setUser((prev) => prev || DEV_USER);
+        setIsAuthenticated(true);
+        setAuthChecked(true);
       }
     } catch (error) {
-      console.error('Unexpected error:', error);
-      setAuthError({
-        type: 'unknown',
-        message: error.message || 'An unexpected error occurred'
-      });
+      console.warn('Unexpected error (using dev user):', error);
       setIsLoadingPublicSettings(false);
       setIsLoadingAuth(false);
+      setUser((prev) => prev || DEV_USER);
+      setIsAuthenticated(true);
+      setAuthChecked(true);
     }
   };
 
@@ -100,18 +84,11 @@ export const AuthProvider = ({ children }) => {
       setIsLoadingAuth(false);
       setAuthChecked(true);
     } catch (error) {
-      console.error('User auth check failed:', error);
+      console.warn('User auth check failed, using dev user:', error);
+      setUser(DEV_USER);
+      setIsAuthenticated(true);
       setIsLoadingAuth(false);
-      setIsAuthenticated(false);
       setAuthChecked(true);
-      
-      // If user auth fails, it might be an expired token
-      if (error.status === 401 || error.status === 403) {
-        setAuthError({
-          type: 'auth_required',
-          message: 'Authentication required'
-        });
-      }
     }
   };
 

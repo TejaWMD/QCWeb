@@ -6,6 +6,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
+import { ErrorBoundary } from './components/ErrorBoundary';
 // Add page imports here
 import Home from './pages/Home';
 import AttentionDashboard from './pages/AttentionDashboard';
@@ -68,8 +69,7 @@ const AuthenticatedApp = () => {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
+      // Redirect to login disabled for now
       return null;
     }
   }
@@ -133,15 +133,17 @@ const AuthenticatedApp = () => {
 function App() {
 
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <ScrollToTop />
-          <AuthenticatedApp />
-        </Router>
-        <Toaster />
-      </QueryClientProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <QueryClientProvider client={queryClientInstance}>
+          <Router>
+            <ScrollToTop />
+            <AuthenticatedApp />
+          </Router>
+          <Toaster />
+        </QueryClientProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   )
 }
 

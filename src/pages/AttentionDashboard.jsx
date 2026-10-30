@@ -20,6 +20,18 @@ const VERIFIED = ["Verified", "Resolved", "Released", "Completed"];
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const fmt = (n) => (n || 0).toLocaleString("en-US");
 
+const EMPTY_DATA = {
+  prod: [],
+  down: [],
+  defects: [],
+  holds: [],
+  haccp: [],
+  staffing: [],
+  discipline: [],
+  tasks: [],
+  capas: [],
+};
+
 const isVerified = (r) => VERIFIED.includes(r.status);
 const isOverdue = (r, today) => !isVerified(r) && !!r.due_date && r.due_date < today;
 const isActiveHold = (r) => !["Completed", "Verified"].includes(r.status);
@@ -28,8 +40,8 @@ export default function AttentionDashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [filters, setFilters] = useState({ date: todayISO(), shift: "all", line: "all", status: "all" });
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(EMPTY_DATA);
+  const [loading, setLoading] = useState(false);
   const filtersRef = useRef(filters);
   filtersRef.current = filters;
 
@@ -41,18 +53,21 @@ export default function AttentionDashboard() {
       if (f.shift !== "all") q.shift_type = f.shift;
       const opt = { limit: 200 };
       const [prod, down, defects, holds, haccp, staffing, discipline, tasks, capas] = await Promise.all([
-        base44.entities.ProductionLog.filter(q, opt).then((p) => p.items),
+        base44.entities.ProductionLog.filter(q, opt).then((p) => p?.items || []).catch(() => []),
         // Demo / test downtime records never appear on the dashboard.
-        base44.entities.Downtime.filter(q, opt).then((p) => p.items.filter((r) => !r.is_demo)),
-        base44.entities.QualityDefect.filter(q, opt).then((p) => p.items),
-        base44.entities.ProductHold.filter(q, opt).then((p) => p.items),
-        base44.entities.HACCPCheck.filter(q, opt).then((p) => p.items),
-        base44.entities.StaffingRecord.filter(q, opt).then((p) => p.items),
-        base44.entities.DisciplineCase.filter(q, opt).then((p) => p.items),
-        base44.entities.Task.filter(q, opt).then((p) => p.items),
-        base44.entities.CAPA.filter(q, opt).then((p) => p.items),
+        base44.entities.Downtime.filter(q, opt).then((p) => (p?.items || []).filter((r) => !r.is_demo)).catch(() => []),
+        base44.entities.QualityDefect.filter(q, opt).then((p) => p?.items || []).catch(() => []),
+        base44.entities.ProductHold.filter(q, opt).then((p) => p?.items || []).catch(() => []),
+        base44.entities.HACCPCheck.filter(q, opt).then((p) => p?.items || []).catch(() => []),
+        base44.entities.StaffingRecord.filter(q, opt).then((p) => p?.items || []).catch(() => []),
+        base44.entities.DisciplineCase.filter(q, opt).then((p) => p?.items || []).catch(() => []),
+        base44.entities.Task.filter(q, opt).then((p) => p?.items || []).catch(() => []),
+        base44.entities.CAPA.filter(q, opt).then((p) => p?.items || []).catch(() => []),
       ]);
       setData({ prod, down, defects, holds, haccp, staffing, discipline, tasks, capas });
+    } catch (err) {
+      console.warn("Could not load attention dashboard data:", err);
+      setData(EMPTY_DATA);
     } finally {
       if (!silent) setLoading(false);
     }
@@ -60,19 +75,25 @@ export default function AttentionDashboard() {
 
   useEffect(() => {
     // Anything past its due date automatically becomes "Overdue" so it shows up here.
-    sweepOverdue().finally(() => load());
+    sweepOverdue().catch(() => {}).finally(() => load());
   }, [filters.date, filters.shift]);
 
   useEffect(() => {
     const reload = () => load(true);
-    const subs = ENTITIES.map((name) => base44.entities[name].subscribe(reload));
+    const subs = ENTITIES.map((name) => {
+      try {
+        return base44.entities[name]?.subscribe?.(reload);
+      } catch {
+        return null;
+      }
+    });
     return () => subs.forEach((u) => { if (typeof u === "function") u(); });
   }, []);
 
   const { date, shift, line, status } = filters;
 
   const view = useMemo(() => {
-    if (!data) return null;
+    const d = data || EMPTY_DATA;
     const today = date;
     const matchesScope = (r) => (line === "all" || !r.production_line || r.production_line === line);
     const matchesStatus = (r) => {
@@ -83,15 +104,15 @@ export default function AttentionDashboard() {
     };
     const scope = (list) => (list || []).filter((r) => matchesScope(r) && matchesStatus(r));
 
-    const prod = scope(data.prod);
-    const down = scope(data.down);
-    const defects = scope(data.defects);
-    const holds = scope(data.holds);
-    const haccp = scope(data.haccp);
-    const staffing = scope(data.staffing);
-    const discipline = scope(data.discipline);
-    const tasks = scope(data.tasks);
-    const capas = scope(data.capas);
+    const prod = scope(d.prod);
+    const down = scope(d.down);
+    const defects = scope(d.defects);
+    const holds = scope(d.holds);
+    const haccp = scope(d.haccp);
+    const staffing = scope(d.staffing);
+    const discipline = scope(d.discipline);
+    const tasks = scope(d.tasks);
+    const capas = scope(d.capas);
 
     // Production
     const actual = prod.reduce((s, r) => s + (r.actual_output || 0), 0);
@@ -152,7 +173,8 @@ export default function AttentionDashboard() {
   }
 
   const role = appRoleOf(user);
-  const targetLabel = view.target >= 1000 ? `${(view.target / 1000).toFixed(view.target % 1000 === 0 ? 0 : 1)}k` : `${view.target}`;
+  const target = view?.target || 0;
+  const targetLabel = target >= 1000 ? `${(target / 1000).toFixed(target % 1000 === 0 ? 0 : 1)}k` : `${target}`;
 
   return (
     <div className="min-h-screen bg-[#0a0e17] p-4 md:p-6 space-y-4">

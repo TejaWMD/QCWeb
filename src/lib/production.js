@@ -49,7 +49,7 @@ export const saveProductionSettings = async ({ settings, user }) => {
 };
 
 export const loadOrders = async () => {
-  const rows = await base44.entities.ProductionOrder.list("-created_date", 1000);
+  const rows = await base44.entities.ProductionOrder.list("-created_date", 1000).catch(() => []);
   return Array.isArray(rows) ? rows : [];
 };
 
