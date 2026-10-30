@@ -250,31 +250,60 @@ export default function PicProductEntry() {
 
       setImportStatus(`Processing ${rawRows.length} rows...`);
 
-      // Map rows loosely to product properties
+      // Robust field finder across multiple alias variations & casing
+      const findVal = (row: any, ...aliases: string[]) => {
+        const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const entries = Object.entries(row);
+        for (const alias of aliases) {
+          const target = norm(alias);
+          for (const [key, val] of entries) {
+            if (norm(key) === target && val !== undefined && val !== null && String(val).trim() !== '') {
+              return val;
+            }
+          }
+        }
+        return undefined;
+      };
+
+      // Map rows cleanly to product properties
       const mappedProducts: ProductInput[] = rawRows
         .map((r) => {
-          const code = r['Item Code'] || r['Product Code'] || r['code'] || r['product_code'];
-          const desc = r['Carton Description'] || r['Description'] || r['product_name'] || r['Product Name'];
+          const code = findVal(r, 'Item Code', 'Product Code', 'Code', 'SKU', 'item_code', 'product_code');
+          const desc = findVal(
+            r,
+            'Item Description/ Carton Description',
+            'Carton Description',
+            'Item Description',
+            'Product Name',
+            'Description',
+            'product_name'
+          );
           if (!code || !desc) return null;
+
+          const cartonSize = Number(findVal(r, 'Pcs per carton', 'Pcs per Carton', 'Pcs / Carton', 'Carton Size', 'carton_size')) || 0;
+          const netWeight = Number(findVal(r, 'Net Weight (kg)', 'Net Weight per Pc (kg)', 'Net Weight', 'net_weight_kg')) || 0;
+          const batchOutput = Number(findVal(r, 'Batch Output (kg)', 'Batch Output', 'batch_output_kg')) || 0;
+          const cookTime = Number(findVal(r, 'Cooking Time (hr)', 'Cooking Time (hours)', 'Cooking Time', 'cooking_time_hr')) || 0;
+          const shelfLife = Number(findVal(r, 'Shelf Life (Months)', 'Shelf Life', 'shelf_life_months')) || 12;
 
           return {
             product_code: String(code).trim().toUpperCase(),
             product_name: String(desc).trim(),
-            brand: String(r['Brand'] || r['brand'] || '').trim(),
-            recipe_name: String(r['Recipe Name'] || r['recipe_name'] || '').trim(),
-            cooking_time_hr: Number(r['Cooking Time (hr)'] || r['cooking_time_hr']) || 0,
-            batch_output_kg: Number(r['Batch Output (kg)'] || r['batch_output_kg']) || 0,
-            carton_size: Number(r['Pcs per Carton'] || r['carton_size']) || 0,
-            net_weight_kg: Number(r['Net Weight per Pc (kg)'] || r['net_weight_kg']) || 0,
-            line_type: String(r['Line Type'] || r['line_type'] || '').trim(),
-            default_machine: String(r['Default Machine'] || r['default_machine'] || '').trim(),
-            batch_prefix: String(r['Batch Code'] || r['batch_prefix'] || '').trim(),
-            shelf_life_months: Number(r['Shelf Life (Months)'] || r['shelf_life_months']) || 12,
-            barcode: cleanBarcode(String(r['SKU Barcode'] || r['barcode'] || '')),
-            carton_barcode: cleanBarcode(String(r['Carton Barcode'] || r['carton_barcode'] || '')),
-            customer: String(r['Customer'] || r['customer'] || 'GENERAL').trim().toUpperCase(),
+            brand: String(findVal(r, 'Brand', 'Brand Name', 'brand') || '').trim(),
+            recipe_name: String(findVal(r, 'Recipe', 'Recipe Name', 'recipe_name') || '').trim(),
+            cooking_time_hr: cookTime,
+            batch_output_kg: batchOutput,
+            carton_size: cartonSize,
+            net_weight_kg: netWeight,
+            line_type: String(findVal(r, 'Packaging Line Code', 'Line Type', 'Line Code', 'Line', 'line_type') || '').trim(),
+            default_machine: String(findVal(r, 'Machine (Tank)', 'Machine', 'Default Machine', 'Tank', 'default_machine') || '').trim(),
+            batch_prefix: String(findVal(r, 'Batch Code', 'Batch Prefix', 'Prefix', 'batch_prefix') || '').trim().toUpperCase(),
+            shelf_life_months: shelfLife,
+            barcode: cleanBarcode(String(findVal(r, 'NEW SKU Barcode', 'SKU Barcode', 'Barcode', 'Unit Barcode', 'barcode') || '')),
+            carton_barcode: cleanBarcode(String(findVal(r, 'NEW Carton Barcode', 'Carton Barcode', 'Outer Barcode', 'carton_barcode') || '')),
+            customer: String(findVal(r, 'Customer', 'Customer / Channel', 'Channel', 'customer') || 'GENERAL').trim().toUpperCase(),
             status: 'Active',
-            remarks: String(r['Remarks'] || r['remarks'] || ''),
+            remarks: String(findVal(r, 'Remarks', 'Remark', 'Notes', 'remarks') || '').trim(),
           } as ProductInput;
         })
         .filter(Boolean) as ProductInput[];
@@ -500,7 +529,7 @@ export default function PicProductEntry() {
                     <input
                       type="text"
                       className="pic-field-input"
-                      placeholder="e.g. PRD-KCP-001"
+                      placeholder="e.g. RSPT350GX12"
                       value={formData.product_code}
                       onChange={(e) => handleFormChange('product_code', e.target.value)}
                       required
@@ -511,7 +540,7 @@ export default function PicProductEntry() {
                     <input
                       type="text"
                       className="pic-field-input"
-                      placeholder="e.g. Kicap Manis 340g (24 pcs)"
+                      placeholder="e.g. RASTO TRADITIONAL PASTA SAUCE 350G X 12"
                       value={formData.product_name}
                       onChange={(e) => handleFormChange('product_name', e.target.value)}
                       required
@@ -519,13 +548,14 @@ export default function PicProductEntry() {
                   </div>
                 </div>
 
-                <div className="pic-form-grid">
+                <div className="pic-form-grid pic-form-grid-3">
                   <div className="pic-field-group">
                     <label className="pic-field-label">Brand</label>
                     <input
                       type="text"
                       className="pic-field-input"
-                      placeholder="e.g. Brand A"
+                      placeholder="e.g. RASTO"
+                      list="pic-brand-list"
                       value={formData.brand}
                       onChange={(e) => handleFormChange('brand', e.target.value)}
                     />
@@ -535,9 +565,21 @@ export default function PicProductEntry() {
                     <input
                       type="text"
                       className="pic-field-input"
-                      placeholder="e.g. GENERAL, OEM"
+                      placeholder="e.g. GENERAL, NSK ONLY, LOTUS"
+                      list="pic-customer-list"
                       value={formData.customer}
                       onChange={(e) => handleFormChange('customer', e.target.value)}
+                    />
+                  </div>
+                  <div className="pic-field-group">
+                    <label className="pic-field-label">Packaging Line Code</label>
+                    <input
+                      type="text"
+                      className="pic-field-input"
+                      placeholder="e.g. SAUCE, POUCH, SYRUP"
+                      list="pic-line-list"
+                      value={formData.line_type}
+                      onChange={(e) => handleFormChange('line_type', e.target.value)}
                     />
                   </div>
                 </div>
@@ -550,7 +592,7 @@ export default function PicProductEntry() {
                       type="number"
                       step="any"
                       className="pic-field-input"
-                      placeholder="e.g. 24"
+                      placeholder="e.g. 12"
                       value={formData.carton_size || ''}
                       onChange={(e) => handleFormChange('carton_size', parseFloat(e.target.value) || 0)}
                     />
@@ -561,7 +603,7 @@ export default function PicProductEntry() {
                       type="number"
                       step="any"
                       className="pic-field-input"
-                      placeholder="e.g. 0.340"
+                      placeholder="e.g. 0.35"
                       value={formData.net_weight_kg || ''}
                       onChange={(e) => handleFormChange('net_weight_kg', parseFloat(e.target.value) || 0)}
                     />
@@ -572,7 +614,7 @@ export default function PicProductEntry() {
                       type="number"
                       step="any"
                       className="pic-field-input"
-                      placeholder="e.g. 1000"
+                      placeholder="e.g. 608"
                       value={formData.batch_output_kg || ''}
                       onChange={(e) => handleFormChange('batch_output_kg', parseFloat(e.target.value) || 0)}
                     />
@@ -606,7 +648,8 @@ export default function PicProductEntry() {
                     <input
                       type="text"
                       className="pic-field-input"
-                      placeholder="e.g. Standard Kicap Recipe"
+                      placeholder="e.g. RASTO TRADITIONAL PASTA SAUCE"
+                      list="pic-recipe-list"
                       value={formData.recipe_name}
                       onChange={(e) => handleFormChange('recipe_name', e.target.value)}
                     />
@@ -617,7 +660,7 @@ export default function PicProductEntry() {
                       type="number"
                       step="any"
                       className="pic-field-input"
-                      placeholder="e.g. 1.5"
+                      placeholder="e.g. 2.0"
                       value={formData.cooking_time_hr || ''}
                       onChange={(e) => handleFormChange('cooking_time_hr', parseFloat(e.target.value) || 0)}
                     />
@@ -627,8 +670,8 @@ export default function PicProductEntry() {
                     <input
                       type="text"
                       className="pic-field-input"
-                      placeholder="e.g. KCP"
-                      maxLength={5}
+                      placeholder="e.g. RTP"
+                      maxLength={6}
                       value={formData.batch_prefix}
                       onChange={(e) => handleFormChange('batch_prefix', e.target.value.toUpperCase())}
                     />
@@ -642,7 +685,8 @@ export default function PicProductEntry() {
                     <input
                       type="text"
                       className="pic-field-input"
-                      placeholder="e.g. Line 1 Filler"
+                      placeholder="e.g. COOKING TANK 1"
+                      list="pic-machine-list"
                       value={formData.default_machine}
                       onChange={(e) => handleFormChange('default_machine', e.target.value)}
                     />
@@ -692,6 +736,33 @@ export default function PicProductEntry() {
                     onChange={(e) => handleFormChange('remarks', e.target.value)}
                   />
                 </div>
+
+                {/* Autocomplete Datalists */}
+                <datalist id="pic-brand-list">
+                  {(settings.brands || []).map((b) => (
+                    <option key={b.name} value={b.name} />
+                  ))}
+                </datalist>
+                <datalist id="pic-customer-list">
+                  {(settings.channels || []).map((c) => (
+                    <option key={c.name} value={c.name} />
+                  ))}
+                </datalist>
+                <datalist id="pic-recipe-list">
+                  {recipes.map((r) => (
+                    <option key={r.recipe_name} value={r.recipe_name} />
+                  ))}
+                </datalist>
+                <datalist id="pic-machine-list">
+                  {machines.map((m) => (
+                    <option key={m.name} value={m.name} />
+                  ))}
+                </datalist>
+                <datalist id="pic-line-list">
+                  {['SAUCE', 'POUCH', '1 KG', 'SYRUP', 'POWDER', 'MAYO', 'SAUCE/ MAYO', 'MANUAL'].map((l) => (
+                    <option key={l} value={l} />
+                  ))}
+                </datalist>
               </div>
 
               <div className="pic-modal-footer">

@@ -54,7 +54,7 @@ const ALIASES = {
   net_filling_kg: ["net filling (kg/carton)", "net filling", "filling (kg/carton)"],
   cartons_per_batch: ["carton/batch", "cartons per batch", "carton per batch", "ctn/batch"],
   brand: ["brand", "brand name"],
-  line_type: ["line code", "line type", "line"],
+  line_type: ["packaging line code", "line code", "line type", "line", "packaging line"],
   batch_prefix: ["batch code", "batch prefix", "prefix"],
   shelf_life_months: ["shelf life (months)", "shelf life (month)", "shelf life"],
   barcode: ["new sku barcode", "sku barcode", "unit barcode", "barcode", "barcode (sku)", "ean", "gtin"],
@@ -62,7 +62,7 @@ const ALIASES = {
   customer: ["customer", "customer name", "channel", "customer/channel"],
   status: ["status (active/ na)", "status (active/na)", "status", "product status", "active/na"],
   remarks: ["remarks", "remark", "notes", "note", "comment"],
-  default_machine: ["default machine", "machine"],
+  default_machine: ["machine (tank)", "default machine", "machine", "tank", "cooking tank", "mixing tank"],
 };
 
 const ALL_ALIASES = new Set(Object.values(ALIASES).flat().map(norm));

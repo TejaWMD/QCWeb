@@ -131,6 +131,7 @@ export const productService = {
       carton_barcode: input.carton_barcode ? cleanBarcode(input.carton_barcode) : '',
       customer: upper(input.customer) || 'GENERAL',
       status: input.status || 'Active',
+      active: (input.status || 'Active') !== 'Inactive',
       deleted: false,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -146,13 +147,33 @@ export const productService = {
       console.error('Error inserting product:', error);
       throw error;
     }
+
+    if (payload.default_machine) {
+      this.ensureMachine(payload.default_machine).catch(() => {});
+    }
+    if (payload.recipe_name) {
+      this.ensureRecipe({
+        recipe_name: payload.recipe_name,
+        cooking_time_hr: payload.cooking_time_hr,
+        batch_output_kg: payload.batch_output_kg,
+        product_code: payload.product_code,
+        product_name: payload.product_name,
+      }).catch(() => {});
+    }
+    if (payload.brand) {
+      this.ensureBrand(payload.brand).catch(() => {});
+    }
+    if (payload.customer) {
+      this.ensureCustomer(payload.customer).catch(() => {});
+    }
+
     return data as Product;
   },
 
   // Update an existing product
   async updateProduct(id: string, input: Partial<ProductInput>): Promise<Product> {
     const derived = calculateProductDerivedFields(input);
-    const payload = {
+    const payload: any = {
       ...input,
       ...derived,
       updated_at: new Date().toISOString(),
@@ -162,6 +183,10 @@ export const productService = {
     if (input.barcode !== undefined) payload.barcode = cleanBarcode(input.barcode);
     if (input.carton_barcode !== undefined) payload.carton_barcode = cleanBarcode(input.carton_barcode);
     if (input.customer !== undefined) payload.customer = upper(input.customer) || 'GENERAL';
+    if (input.status !== undefined) {
+      payload.status = input.status;
+      payload.active = input.status !== 'Inactive';
+    }
 
     const { data, error } = await supabase
       .from('products')
@@ -174,6 +199,26 @@ export const productService = {
       console.error('Error updating product:', error);
       throw error;
     }
+
+    if (payload.default_machine) {
+      this.ensureMachine(payload.default_machine).catch(() => {});
+    }
+    if (payload.recipe_name) {
+      this.ensureRecipe({
+        recipe_name: payload.recipe_name,
+        cooking_time_hr: payload.cooking_time_hr,
+        batch_output_kg: payload.batch_output_kg,
+        product_code: payload.product_code,
+        product_name: payload.product_name,
+      }).catch(() => {});
+    }
+    if (payload.brand) {
+      this.ensureBrand(payload.brand).catch(() => {});
+    }
+    if (payload.customer) {
+      this.ensureCustomer(payload.customer).catch(() => {});
+    }
+
     return data as Product;
   },
 
@@ -183,6 +228,7 @@ export const productService = {
       .from('products')
       .update({
         deleted: true,
+        active: false,
         deleted_at: new Date().toISOString(),
         deleted_by: deletedBy,
         updated_at: new Date().toISOString(),
@@ -201,6 +247,8 @@ export const productService = {
       .from('products')
       .update({
         deleted: false,
+        active: true,
+        status: 'Active',
         deleted_at: null,
         deleted_by: null,
         updated_at: new Date().toISOString(),
@@ -209,6 +257,19 @@ export const productService = {
 
     if (error) {
       console.error('Error restoring product:', error);
+      throw error;
+    }
+  },
+
+  // Permanent hard delete
+  async deleteProduct(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error permanently deleting product:', error);
       throw error;
     }
   },
@@ -226,6 +287,7 @@ export const productService = {
         carton_barcode: p.carton_barcode ? cleanBarcode(p.carton_barcode) : '',
         customer: upper(p.customer) || 'GENERAL',
         status: p.status || 'Active',
+        active: (p.status || 'Active') !== 'Inactive',
         deleted: false,
         updated_at: new Date().toISOString(),
       };
@@ -240,6 +302,28 @@ export const productService = {
       console.error('Error in bulk upsert products:', error);
       throw error;
     }
+
+    const uniqueMachines = [...new Set(products.map((p) => p.default_machine).filter(Boolean))] as string[];
+    uniqueMachines.forEach((m) => this.ensureMachine(m).catch(() => {}));
+
+    const uniqueBrands = [...new Set(products.map((p) => p.brand).filter(Boolean))] as string[];
+    uniqueBrands.forEach((b) => this.ensureBrand(b).catch(() => {}));
+
+    const uniqueCustomers = [...new Set(products.map((p) => p.customer).filter(Boolean))] as string[];
+    uniqueCustomers.forEach((c) => this.ensureCustomer(c).catch(() => {}));
+
+    products.forEach((p) => {
+      if (p.recipe_name) {
+        this.ensureRecipe({
+          recipe_name: p.recipe_name,
+          cooking_time_hr: p.cooking_time_hr,
+          batch_output_kg: p.batch_output_kg,
+          product_code: p.product_code,
+          product_name: p.product_name,
+        }).catch(() => {});
+      }
+    });
+
     return { count: data?.length || 0 };
   },
 
@@ -322,5 +406,64 @@ export const productService = {
       return [];
     }
     return (data || []) as PackagingItem[];
+  },
+
+  async ensureMachine(name: string): Promise<void> {
+    const trimmed = cleanText(name);
+    if (!trimmed) return;
+    const { data } = await supabase.from('machines').select('id').eq('name', trimmed).limit(1);
+    if (!data || data.length === 0) {
+      await supabase.from('machines').insert({
+        name: trimmed,
+        status: 'Active',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+    }
+  },
+
+  async ensureRecipe(recipe: { recipe_name: string; cooking_time_hr?: number; batch_output_kg?: number; product_code?: string; product_name?: string }): Promise<void> {
+    const trimmed = cleanText(recipe.recipe_name);
+    if (!trimmed) return;
+    const { data } = await supabase.from('recipes').select('id').eq('recipe_name', trimmed).limit(1);
+    if (!data || data.length === 0) {
+      await supabase.from('recipes').insert({
+        recipe_name: trimmed,
+        cooking_time_hr: num(recipe.cooking_time_hr),
+        batch_output_kg: num(recipe.batch_output_kg),
+        product_code: recipe.product_code || '',
+        product_name: recipe.product_name || '',
+        version: 1,
+        status: 'Active',
+        standard_yield_pct: 100,
+        ingredients: [],
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+    }
+  },
+
+  async ensureBrand(brandName: string): Promise<void> {
+    const trimmed = cleanText(brandName);
+    if (!trimmed) return;
+    const settings = await this.getProductSettings();
+    const existing = settings.brands || [];
+    if (!existing.some((b) => upper(b.name) === upper(trimmed))) {
+      await this.saveProductSettings({
+        brands: [...existing, { name: trimmed, active: true }],
+      });
+    }
+  },
+
+  async ensureCustomer(customerName: string): Promise<void> {
+    const trimmed = cleanText(customerName);
+    if (!trimmed) return;
+    const settings = await this.getProductSettings();
+    const existing = settings.channels || [];
+    if (!existing.some((c) => upper(c.name) === upper(trimmed))) {
+      await this.saveProductSettings({
+        channels: [...existing, { name: trimmed.toUpperCase(), active: true }],
+      });
+    }
   },
 };
